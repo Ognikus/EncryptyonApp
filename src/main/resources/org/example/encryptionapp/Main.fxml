@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+
+<?import java.lang.String?>
+<VBox fx:controller="org.example.encryptionapp.MainController" xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1" spacing="20" alignment="CENTER"
+      style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
+    <Label text="Шифровальщик" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;">
+        <font>
+            <Font name="Arial" size="24"/>
+        </font>
+    </Label>
+
+    <HBox spacing="20" alignment="CENTER">
+        <!-- Левая панель - ввод текста -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 15;">
+            <Label text="Исходный текст:" style="-fx-font-weight: bold;"/>
+            <TextArea fx:id="inputTextArea" promptText="Введите текст для шифрования/дешифрования"
+                      style="-fx-min-width: 300px; -fx-min-height: 200px;"/>
+
+            <Label text="Действие:" style="-fx-font-weight: bold; -fx-padding-top: 10;"/>
+            <HBox spacing="10">
+                <RadioButton fx:id="encryptRadio" text="Шифровать" selected="true">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="actionGroup"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="decryptRadio" text="Дешифровать" toggleGroup="$actionGroup"/>
+            </HBox>
+        </VBox>
+
+        <!-- Правая панель - результат -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 15;">
+            <Label text="Результат:" style="-fx-font-weight: bold;"/>
+            <TextArea fx:id="outputTextArea" editable="false" style="-fx-min-width: 300px; -fx-min-height: 200px;"/>
+            <Button fx:id="copyButton" text="Копировать результат"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 10;" onAction="#handleCopyResult"/>
+        </VBox>
+    </HBox>
+
+    <!-- Панель выбора метода шифрования -->
+    <VBox spacing="10"
+          style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 15;">
+        <Label text="Метод шифрования:" style="-fx-font-weight: bold;"/>
+
+        <ComboBox fx:id="encryptionMethodComboBox" promptText="Выберите метод шифрования">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="1. Шифр Цезаря"/>
+                    <String fx:value="2. Шифр Виженера"/>
+                    <String fx:value="3. Шифр Атбаш"/>
+                    <String fx:value="4. Шифр Плейфера"/>
+                    <String fx:value="5. Шифр Вернам"/>
+                    <String fx:value="6. Шифр RSA"/>
+                    <String fx:value="7. Шифр DES"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <!-- Динамическая панель параметров -->
+        <StackPane fx:id="paramsPane">
+            <!-- По умолчанию - параметры для Цезаря -->
+            <VBox fx:id="caesarParams" spacing="5">
+                <Label text="Шаг шифрования:"/>
+                <TextField fx:id="caesarStepField" promptText="Введите шаг (число)"/>
+            </VBox>
+
+            <!-- Другие параметры будут скрыты по умолчанию -->
+            <VBox fx:id="vigenereParams" spacing="5" visible="false">
+                <Label text="Ключ шифрования:"/>
+                <TextField fx:id="vigenereKeyField" promptText="Введите ключ (слово)"/>
+            </VBox>
+
+            <VBox fx:id="playfairParams" spacing="5" visible="false">
+                <Label text="Ключевое слово:"/>
+                <TextField fx:id="playfairKeyField" promptText="Введите ключевое слово"/>
+            </VBox>
+
+            <VBox fx:id="vernamParams" spacing="5" visible="false">
+                <Label text="Ключ (должен быть длиной как текст):"/>
+                <TextField fx:id="vernamKeyField" promptText="Введите ключ"/>
+            </VBox>
+
+            <VBox fx:id="rsaParams" spacing="5" visible="false">
+                <Label text="Параметры RSA:"/>
+                <HBox spacing="5">
+                    <TextField fx:id="rsaPublicKeyField" promptText="Открытый ключ"/>
+                    <TextField fx:id="rsaPrivateKeyField" promptText="Закрытый ключ"/>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="desParams" spacing="5" visible="false">
+                <Label text="Ключ DES (8 символов):"/>
+                <TextField fx:id="desKeyField" promptText="Введите ключ"/>
+            </VBox>
+        </StackPane>
+
+        <Button fx:id="executeButton" text="Выполнить"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20 ;"
+                onAction="#handleExecute"/>
+    </VBox>
+</VBox>
